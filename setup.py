@@ -1,9 +1,8 @@
-from setuptools import setup, find_packages
-import os
+from setuptools import setup
 
-datadir = os.path.join('TutGen','templates')
-datafiles = [(d, [os.path.join(d,f) for f in files])
-    for d, folders, files in os.walk(datadir)]
+# datadir = os.path.join('templates')
+# datafiles = [(d, [os.path.join(d,f) for f in files])
+#     for d, folders, files in os.walk(datadir)]
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
@@ -23,6 +22,5 @@ setup(
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
     scripts=['scripts/tutGen.py'],
-
-    data_files= datafiles,
+    data_files=[('TutGen/templates',['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])]
 )
