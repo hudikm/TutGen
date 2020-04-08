@@ -23,5 +23,5 @@ setup(
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
     scripts=['scripts/tutGen.py'],
-    package_data=[(pathlib.Path.home()+'.local/TutGen/templates',['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])]
+    data_files=[(pathlib.Path.home().joinpath('.local/TutGen/templates'),['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])]
 )
