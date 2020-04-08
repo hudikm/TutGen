@@ -1,4 +1,5 @@
 from setuptools import setup
+import os
 
 datadir = os.path.join('templates')
 datafiles = [(d, [os.path.join(d,f) for f in files])
