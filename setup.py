@@ -1,4 +1,5 @@
 from setuptools import setup
+import pathlib
 
 # datadir = os.path.join('templates')
 # datafiles = [(d, [os.path.join(d,f) for f in files])
@@ -22,5 +23,5 @@ setup(
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
     scripts=['scripts/tutGen.py'],
-    data_files=[('TutGen/templates',['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])]
+    package_data=[(pathlib.Path.home()+'.local/TutGen/templates',['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])]
 )
