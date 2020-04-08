@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-datadir = os.path.join('templates')
+datadir = os.path.join('TutGen','templates')
 datafiles = [(d, [os.path.join(d,f) for f in files])
     for d, folders, files in os.walk(datadir)]
 
@@ -24,9 +24,6 @@ setup(
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
     scripts=['scripts/tutGen.py'],
-
-    packages=find_packages('TutGen'),
-    package_dir=package_dir,
 
     data_files= datafiles,
 )
