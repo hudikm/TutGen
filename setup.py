@@ -17,5 +17,6 @@ setup(
     description='Generator step by step tutorials from patch file',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
-    scripts=['scripts/tutGen.py']
+    scripts=['scripts/tutGen.py'],
+    data_files=[('templates',['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])]
 )
