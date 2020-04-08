@@ -9,6 +9,7 @@ import urllib
 import urllib.request
 import jinja2
 import argparse
+import pathlib
 from typing import Any, TypeVar
 from unidiff import PatchSet
 from enum import Enum
@@ -512,7 +513,7 @@ def main():
     cliParser.add_argument('-t', '--template', metavar='template', type=str, nargs='?', help='Template file', default='mkdocs.jinja')
     args = cliParser.parse_args()
 
-    TEMPLATE_DIR = '../templates/'
+    TEMPLATE_DIR = str(pathlib.Path.home().joinpath('.local/TutGen/templates/'))
     TEMPLATE_FILE = 'mkdocs.jinja'
     MAIN_CONTEXT = 'MAIN_CONTEXT'
     # DIFF_CONTEXT = \
