@@ -648,7 +648,7 @@ def main():
                         TEMPLATE_FILE = args.template
 
             gen_text = env.get_template(TEMPLATE_FILE).render(element=attribs)
-            print(gen_text)
+            logging.debug(gen_text)
             sub_reg = r"(" + attribs.parent_element.group() + r"\s?)(.*?)(<!--end-->)"
 
             if attribs.template == "gen_tags.jinja":
