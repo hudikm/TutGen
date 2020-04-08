@@ -13,6 +13,7 @@ setup(
     author_email='martin.hudik@fri.uniza.sk',
     # Needed to actually package something
     packages=['TutGen'],
+    package_dir  = package_dir,
     # Needed for dependencies
     install_requires=['Jinja2', 'unidiff'],
     # *strongly* suggested for sharing
@@ -23,5 +24,9 @@ setup(
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
     scripts=['scripts/tutGen.py'],
+
+    packages=find_packages('TutGen'),
+    package_dir=package_dir,
+
     data_files= datafiles,
 )
