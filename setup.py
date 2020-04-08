@@ -13,7 +13,6 @@ setup(
     author_email='martin.hudik@fri.uniza.sk',
     # Needed to actually package something
     packages=['TutGen'],
-    package_dir  = package_dir,
     # Needed for dependencies
     install_requires=['Jinja2', 'unidiff'],
     # *strongly* suggested for sharing
