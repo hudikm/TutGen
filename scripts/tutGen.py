@@ -23,7 +23,7 @@ command:
 
 """
 
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
 
 def auto_str(cls):
     def __str__(self):
