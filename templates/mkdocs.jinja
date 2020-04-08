@@ -1,0 +1,48 @@
+{%- set ns = namespace(hl_lines='', code_block="") -%}
+{%- for commit in element.commits -%}
+{#- Nadpis a tag -#}
+####{{element.prefix if element.prefix != none }}{{ commit.tag if 'tag' in element.visibility.value  }}{{element.suffix if element.suffix != none}} {{ commit.msg if 'title' in element.visibility.value  }} {{ "[:link:]("+commit.remoteUrl[:-4]+"/commit/"+commit.hash+"/)" }}
+{%- for changes in commit.diff %}
+>  **{{ "[🖹]("+commit.remoteUrl[:-4]+"/blob/"+commit.hash+"/"+changes.path+")" }} {{ changes.path }}**
+{%  for section in changes %}
+{%-  set ns.code_block='' %}
+{%-  set ns.hl_lines=''%}
+{%-  if section.target[0][1] =='\n' -%} {#- Odstranenie prveho prazdneho riadku -#}
+{%-   set code_in_lines = section.target[1:] -%}
+{%-  else -%}
+{%-   set code_in_lines = section.target -%}
+{%-  endif -%}
+{%-  for line in code_in_lines %}
+{%-   if line[:1]=='+'  %} {#Get the number of lines to highlight#}
+{%-    set ns.hl_lines= ns.hl_lines ~ ' ' ~ loop.index %}
+{%-   endif %}
+{%-   set ns.code_block = ns.code_block ~ line[1:] %}
+{%- endfor %}
+{{- '\n > '+section.section_header if section.section_header != ''  }}
+
+``` {{element.lang if element.lang != none }} {{("tab=\""+ element.t_new +"\"")  if element.tabs }} {{ ('hl_lines="' + ns.hl_lines[1:] +'"') if not element.nohighlight }}
+{{ ns.code_block }}
+```
+{# Render prev file #}
+{%- if element.tabs and section.source[0]|length > 1 %}
+{%-  set ns.code_block='' %}
+{%-  set ns.hl_lines=''%}
+{%-  if section.source[0][1] =='\n' -%} {#- Odstranenie prveho prazdneho riadku -#}
+{%-   set code_in_lines = section.source[1:] -%}
+{%-  else -%}
+{%-   set code_in_lines = section.source -%}
+{%-  endif -%}
+{%-  for line in code_in_lines %}
+{%-   if line[:1]=='-'  %} {#Get the number of lines to highlight#}
+{%-    set ns.hl_lines= ns.hl_lines ~ ' ' ~ loop.index %}
+{%-   endif %}
+{%-   set ns.code_block = ns.code_block ~ line[1:] %}
+{%- endfor %}
+``` {{element.lang if element.lang != none }} {{("tab=\""+ element.t_old +"\"") if element.tabs }} {{ (('hl_lines="' + ns.hl_lines[1:] +'"') if  ns.hl_lines|length > 0) if not element.nohighlight }}
+{{ ns.code_block }}
+```
+{%- endif %}
+{% endfor %}
+{%- endfor %}
+{%- endfor -%}
+

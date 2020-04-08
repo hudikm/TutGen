@@ -1,0 +1,6 @@
+{%- set ns = namespace(hl_lines='', code_block="") -%}
+{%- for commit in element.commits -%}
+{#- Nadpis a tag -#}
+###{{element.prefix}}{{ commit.tag if 'tag' in element.visibility.value  }}{{element.suffix}} {{ commit.msg if 'title' in element.visibility.value  }} {{ "[:link:]("+commit.remoteUrl[:-4]+"/commit/"+commit.hash+"/)" }}
+{% endfor -%}
+

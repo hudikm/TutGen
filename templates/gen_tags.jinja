@@ -1,0 +1,6 @@
+{%- set ns = namespace(hl_lines='', code_block="") -%}
+{%- for commit in element.commits -%}
+<!--tgen tag={{ commit.tag  }} {{("suffix=" + element.suffix) if element.suffix != ''}} {{("prefix=" + element.prefix) if element.prefix != ''}}-->
+<!--end-->
+{% endfor %}
+
