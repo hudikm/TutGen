@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
-    name='PatchCreator',
+    name='TutGen',
     url='https://github.com/hudikm/tutgen',
     author='Martin Hudik',
     author_email='martin.hudik@fri.uniza.sk',
