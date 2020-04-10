@@ -205,6 +205,8 @@ class NewAttribs:
                 self.__step = 'list'
             else:
                 self.__step = value
+        else:
+            self.__step = value
 
     # @property
     # def file(self):
