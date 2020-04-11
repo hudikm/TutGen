@@ -47,7 +47,7 @@ class NewAttribs:
         var = self.__update = True
         var = self.__append = False
         var = self.__noupdate = False
-        var = self.__nohighlight = False
+        var = self.nohighlight = False
         var = self.__step = ''
         var = self.steps = []
         var = self.file = None
@@ -226,7 +226,7 @@ class NewAttribs:
             attrib[1] = attribTuple[2] + attribTuple[4]
             try:
                 if attrib[1] == '' or attrib[1] is None:
-                    if getattr(new_attribs, attrib[0]) is bool:
+                    if isinstance(getattr(new_attribs, attrib[0]), bool):
                         attrib[1] = True
                     else:
                         attrib[1] = getattr(new_attribs, attrib[0], None)
