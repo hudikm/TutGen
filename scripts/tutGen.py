@@ -224,15 +224,19 @@ class NewAttribs:
             attrib = [None] * 2
             attrib[0] = attribTuple[0]
             attrib[1] = attribTuple[2] + attribTuple[4]
-            if attrib[1] == '' or attrib[1] is None:
-                if getattr(new_attribs, attrib[0]) is bool:
-                    attrib[1] = True
-                else:
-                    attrib[1] = getattr(new_attribs, attrib[0], None)
+            try:
+                if attrib[1] == '' or attrib[1] is None:
+                    if getattr(new_attribs, attrib[0]) is bool:
+                        attrib[1] = True
+                    else:
+                        attrib[1] = getattr(new_attribs, attrib[0], None)
 
-            elif attrib[1].lower() == 'false':
-                attrib[1] = False
-            setattr(new_attribs, attrib[0], attrib[1])
+                elif attrib[1].lower() == 'false':
+                    attrib[1] = False
+                setattr(new_attribs, attrib[0], attrib[1])
+            except AttributeError as err:
+                raise InputError('', ' \n\t' + str(err))
+
         return new_attribs
 
 
