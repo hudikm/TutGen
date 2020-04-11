@@ -35,6 +35,9 @@ def auto_str(cls):
     cls.__str__ = __str__
     return cls
 
+class BoolType:
+    pass
+
 @auto_str
 class NewAttribs:
     class Visibility(Enum):
@@ -59,7 +62,7 @@ class NewAttribs:
         var = self.parent_element = parent
         var = self.commits = []
         var = self.template = None
-        var = self.tabs = False
+        var = self.tabs = BoolType
         var = self.t_old = None
         var = self.t_new = None
         var = self.oneonly_g1 = 0
@@ -226,7 +229,7 @@ class NewAttribs:
             attrib[1] = attribTuple[2] + attribTuple[4]
             try:
                 if attrib[1] == '' or attrib[1] is None:
-                    if isinstance(getattr(new_attribs, attrib[0]), bool):
+                    if isinstance(getattr(new_attribs, attrib[0]), BoolType.__class__):
                         attrib[1] = True
                     else:
                         attrib[1] = getattr(new_attribs, attrib[0], None)
@@ -441,7 +444,7 @@ class ContextResource:
         def dump_values(self, attribs: NewAttribs):
             for item in vars(self).items():
                 value = getattr(attribs, str(item[0]), None)
-                if value is not None:
+                if value is not None and not isinstance(value, BoolType.__class__) :
                     setattr(self, str(item[0]), value)
 
         def load_values(self, attribs: NewAttribs):
@@ -449,7 +452,7 @@ class ContextResource:
                 value = getattr(self, str(item[0]), None)
                 valueAttib = getattr(attribs, str(item[0]), None)
                 # Copy context value only if attrib is not set
-                if valueAttib is None:
+                if valueAttib is None or isinstance(valueAttib, BoolType.__class__) :
                     setattr(attribs, str(item[0]), value)
 
     pass
