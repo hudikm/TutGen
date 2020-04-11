@@ -50,7 +50,7 @@ class NewAttribs:
         var = self.__update = True
         var = self.__append = False
         var = self.__noupdate = False
-        var = self.nohighlight = False
+        var = self.nohighlight = BoolType
         var = self.__step = ''
         var = self.steps = []
         var = self.file = None
@@ -65,6 +65,7 @@ class NewAttribs:
         var = self.tabs = BoolType
         var = self.t_old = None
         var = self.t_new = None
+        # Pomocna premmena, ktora zabezpeci, ze v skupene spoloznych nastavení je mozne nastavit iba jedno
         var = self.oneonly_g1 = 0
 
 
@@ -440,6 +441,7 @@ class ContextResource:
             self.t_new = 'New'
             self.prefix = None
             self.suffix = None
+            self.nohighlight = False
 
         def dump_values(self, attribs: NewAttribs):
             for item in vars(self).items():
