@@ -59,7 +59,7 @@ class NewAttribs:
         var = self.parent_element = parent
         var = self.commits = []
         var = self.template = None
-        var = self.tabs = None
+        var = self.tabs = False
         var = self.t_old = None
         var = self.t_new = None
         var = self.oneonly_g1 = 0
@@ -225,7 +225,11 @@ class NewAttribs:
             attrib[0] = attribTuple[0]
             attrib[1] = attribTuple[2] + attribTuple[4]
             if attrib[1] == '' or attrib[1] is None:
-                attrib[1] = True
+                if getattr(new_attribs, attrib[0]) is bool:
+                    attrib[1] = True
+                else:
+                    attrib[1] = getattr(new_attribs, attrib[0], None)
+
             elif attrib[1].lower() == 'false':
                 attrib[1] = False
             setattr(new_attribs, attrib[0], attrib[1])
