@@ -230,7 +230,7 @@ class NewAttribs:
             attrib[1] = attribTuple[2] + attribTuple[4]
             try:
                 if attrib[1] == '' or attrib[1] is None:
-                    if isinstance(getattr(new_attribs, attrib[0]), BoolType.__class__):
+                    if isinstance(getattr(new_attribs, attrib[0]), BoolType.__class__) or isinstance(getattr(new_attribs, attrib[0]), bool):
                         attrib[1] = True
                     else:
                         attrib[1] = getattr(new_attribs, attrib[0], None)
