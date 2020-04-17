@@ -15,6 +15,7 @@ import pathlib
 from typing import Any, TypeVar
 from unidiff import PatchSet
 from enum import Enum
+import glob
 
 """
 This example module shows various types of documentation available for use
@@ -24,7 +25,6 @@ command:
     pydoc -w NewAttribs
 
 """
-
 
 
 def auto_str(cls):
@@ -37,8 +37,10 @@ def auto_str(cls):
     cls.__str__ = __str__
     return cls
 
+
 class BoolType:
     pass
+
 
 @auto_str
 class NewAttribs:
@@ -69,7 +71,6 @@ class NewAttribs:
         var = self.t_new = None
         # Pomocna premmena, ktora zabezpeci, ze v skupene spoloznych nastavení je mozne nastavit iba jedno
         var = self.oneonly_g1 = 0
-
 
     # @property
     # def t_new(self):
@@ -147,7 +148,7 @@ class NewAttribs:
     # @context.setter
     # def context(self, value):
     #     self.__context = value if value is not None else None
-    
+
     @property
     def update(self):
         return self.__update
@@ -181,7 +182,6 @@ class NewAttribs:
     @property
     def noupdate(self):
         return self.__noupdate
-
 
     @noupdate.setter
     def noupdate(self, value):
@@ -221,8 +221,7 @@ class NewAttribs:
     # @file.setter
     # def file(self, value):
     #     self.__file = value if value is not None else True
-        
-    
+
     @staticmethod
     def instance(attribs, parent):
         new_attribs = NewAttribs(parent)
@@ -232,7 +231,8 @@ class NewAttribs:
             attrib[1] = attribTuple[2] + attribTuple[4]
             try:
                 if attrib[1] == '' or attrib[1] is None:
-                    if isinstance(getattr(new_attribs, attrib[0]), BoolType.__class__) or isinstance(getattr(new_attribs, attrib[0]), bool):
+                    if isinstance(getattr(new_attribs, attrib[0]), BoolType.__class__) or isinstance(
+                            getattr(new_attribs, attrib[0]), bool):
                         attrib[1] = True
                     else:
                         attrib[1] = getattr(new_attribs, attrib[0], None)
@@ -244,7 +244,6 @@ class NewAttribs:
                 raise InputError('', ' \n\t' + str(err))
 
         return new_attribs
-
 
     def isInRange(self, step):
         if step.lower() == 'ignore':
@@ -410,9 +409,10 @@ class Commit:
     hash: str
     diff: None
     remoteUrl: str
-    fileList:str
+    fileList: str
 
-    def __init__(self, commitTag: str, commitMsg: str, commitHash: str, commitDiff: str, remoteUrl: str, fileList: str) -> None:
+    def __init__(self, commitTag: str, commitMsg: str, commitHash: str, commitDiff: str, remoteUrl: str,
+                 fileList: str) -> None:
         self.tag = commitTag
         self.msg = commitMsg
         self.hash = commitHash
@@ -448,7 +448,7 @@ class ContextResource:
         def dump_values(self, attribs: NewAttribs):
             for item in vars(self).items():
                 value = getattr(attribs, str(item[0]), None)
-                if value is not None and not isinstance(value, BoolType.__class__) :
+                if value is not None and not isinstance(value, BoolType.__class__):
                     setattr(self, str(item[0]), value)
 
         def load_values(self, attribs: NewAttribs):
@@ -456,7 +456,7 @@ class ContextResource:
                 value = getattr(self, str(item[0]), None)
                 valueAttib = getattr(attribs, str(item[0]), None)
                 # Copy context value only if attrib is not set
-                if valueAttib is None or isinstance(valueAttib, BoolType.__class__) :
+                if valueAttib is None or isinstance(valueAttib, BoolType.__class__):
                     setattr(attribs, str(item[0]), value)
 
     pass
@@ -520,15 +520,18 @@ def log_warring(message, tag_, data_in):
     logging.warning("Warring at line {start}: {match} \n-->Error message: {msg} ".format(start=count
                                                                                          , match=tag_.group()
                                                                                          , msg=message))
-def main():
 
+
+def main():
     cliParser = argparse.ArgumentParser(description='Generate code snippets from diff file')
     cliParser.add_argument('infile', metavar='infile', type=str, nargs=1, help='Input file  to process')
     cliParser.add_argument('outfile', metavar='outfile', type=str, nargs='?', help='Output file')
     cliParser.add_argument('-d', '--diff_file', metavar='diff_file', type=str, nargs='?', help='Git diff file/url')
-    cliParser.add_argument('-e', '--encoding', metavar='encoding', type=str, nargs='?', help='Encodning', default='UTF-8')
-    cliParser.add_argument('-t', '--template', metavar='template', type=str, nargs='?', help='Template file', default='mkdocs.jinja')
-    cliParser.add_argument('-v', '--verbose', help='Verbose mode',nargs='?', const=True, default=False)
+    cliParser.add_argument('-e', '--encoding', metavar='encoding', type=str, nargs='?', help='Encodning',
+                           default='UTF-8')
+    cliParser.add_argument('-t', '--template', metavar='template', type=str, nargs='?', help='Template file',
+                           default='mkdocs.jinja')
+    cliParser.add_argument('-v', '--verbose', help='Verbose mode', nargs='?', const=True, default=False)
     args = cliParser.parse_args()
     if args.verbose:
         logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
@@ -550,16 +553,15 @@ def main():
 
     flatList = []
     for elem in search_in:
-        if isinstance(elem,str):
+        if isinstance(elem, str):
             flatList.append(elem)
         else:
             for item in elem:
                 flatList.append(item)
 
-
     for loc_path in flatList:
-        logging.debug("Searching for temaplates in:"+ loc_path + TEMPLATE_DIR);
-        if os.path.isdir( loc_path + TEMPLATE_DIR):
+        logging.debug("Searching for temaplates in:" + loc_path + TEMPLATE_DIR);
+        if os.path.isdir(loc_path + TEMPLATE_DIR):
             TEMPLATE_DIR_PATH_FOUND = True
             TEMPLATE_DIR = loc_path + TEMPLATE_DIR
             break
@@ -591,8 +593,6 @@ def main():
         OUTPUT_FILE = INPUT_FILE
     else:
         OUTPUT_FILE = args.outfile
-
-
 
     # Set up jinja templates. Look for templates in the TEMPLATE_DIR
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR))
@@ -631,8 +631,10 @@ def main():
 
     for matchNum, elementGroups in enumerate(interElements, start=1):
 
-        logging.debug("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum=matchNum, start=elementGroups.start(),
-                                                                           end=elementGroups.end(), match=elementGroups.group()))
+        logging.debug("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum=matchNum,
+                                                                                    start=elementGroups.start(),
+                                                                                    end=elementGroups.end(),
+                                                                                    match=elementGroups.group()))
 
         element = elementGroups.group(1)
 
@@ -665,12 +667,16 @@ def main():
                     sys.exit(1)
             else:
                 if attribs.context in DIFF_CONTEXT:
-                    log_warring("Context: {context} have already opened file: {file}".format(context=attribs.context,file=DIFF_CONTEXT[attribs.context].url), elementGroups,data_in)
+                    log_warring("Context: {context} have already opened file: {file}".format(context=attribs.context,
+                                                                                             file=DIFF_CONTEXT[
+                                                                                                 attribs.context].url),
+                                elementGroups, data_in)
                 try:
                     DIFF_CONTEXT[attribs.context] = ContextResource(attribs.file, template=attribs.template)
                     DIFF_CONTEXT[attribs.context].default_values.dump_values(attribs)
                 except Exception as e:
-                    log_error("File {file} is not found: \n{exc}".format(file=attribs.file, exc=str(e)), elementGroups, data_in)
+                    log_error("File {file} is not found: \n{exc}".format(file=attribs.file, exc=str(e)), elementGroups,
+                              data_in)
                     sys.exit(1)
         else:
             # Continue to process parsed attribs:
@@ -681,7 +687,8 @@ def main():
                     TEMPLATE_FILE = DIFF_CONTEXT[MAIN_CONTEXT].template
                     DIFF_CONTEXT[MAIN_CONTEXT].default_values.load_values(attribs)
                 except Exception:
-                    log_error("For main context there is no diff file defined: \n".format(file=attribs.file), elementGroups, data_in)
+                    log_error("For main context there is no diff file defined: \n".format(file=attribs.file),
+                              elementGroups, data_in)
                     sys.exit(1)
             else:
                 # context was specified use it
@@ -690,7 +697,9 @@ def main():
                     TEMPLATE_FILE = DIFF_CONTEXT[attribs.context].template
                     DIFF_CONTEXT[attribs.context].default_values.load_values(attribs)
                 except Exception as e:
-                    log_error("Context: {context} has no open file: \n{exc}".format(context=attribs.context, exc=str(e)), elementGroups, data_in)
+                    log_error(
+                        "Context: {context} has no open file: \n{exc}".format(context=attribs.context, exc=str(e)),
+                        elementGroups, data_in)
                     sys.exit(1)
 
             # Process the attributes
@@ -705,9 +714,14 @@ def main():
 
             if TEMPLATE_FILE is None:
                 if attribs.template is not None:
-                        TEMPLATE_FILE = attribs.template
+                    TEMPLATE_FILE = attribs.template
                 else:
-                        TEMPLATE_FILE = args.template
+                    TEMPLATE_FILE = args.template
+
+            # Test if TEMPLATE_FILE exists
+            if not os.path.isfile(TEMPLATE_DIR + TEMPLATE_FILE):
+                # Try to uses jinja extension
+                TEMPLATE_FILE += ".jinja"
 
             gen_text = env.get_template(TEMPLATE_FILE).render(element=attribs)
             logging.debug(gen_text)
@@ -732,5 +746,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
