@@ -5,17 +5,14 @@ import os
 import sys
 import logging
 import re
-import types
 import urllib
 import urllib.request
 import jinja2
 import argparse
 import site
-import pathlib
 from typing import Any, TypeVar
 from unidiff import PatchSet
 from enum import Enum
-import glob
 
 """
 This example module shows various types of documentation available for use
@@ -48,12 +45,14 @@ class NewAttribs:
         all = 'tag title'
         tag = 'tag'
         title = 'title'
+        none = 'none'
         pass
 
     def __init__(self, parent):
         var = self.__update = True
         var = self.__append = False
         var = self.__noupdate = False
+        var = self.__remove = False
         var = self.nohighlight = BoolType
         var = self.__step = ''
         var = self.steps = []
@@ -156,6 +155,17 @@ class NewAttribs:
     @update.setter
     def update(self, value):
         self.__update = value if value is not None else True
+        self.oneonly_g1 += 1
+        if self.oneonly_g1 > 1:
+            raise InputError('', 'Only one variable can be set')
+
+    @property
+    def remove(self):
+        return self.__remove
+
+    @remove.setter
+    def remove(self, value):
+        self.__remove = value if value is not None else True
         self.oneonly_g1 += 1
         if self.oneonly_g1 > 1:
             raise InputError('', 'Only one variable can be set')
@@ -565,17 +575,13 @@ def main():
             TEMPLATE_DIR_PATH_FOUND = True
             TEMPLATE_DIR = loc_path + TEMPLATE_DIR
             break
-    # # If not found in user space, search in system wide
-    # if not TEMPLATE_DIR_PATH_FOUND:
-    #     for loc_path in site.getsitepackages():
-    #         if os.path.isdir(loc_path + TEMPLATE_DIR):
-    #             TEMPLATE_DIR_PATH_FOUND = True
-    #             TEMPLATE_DIR = loc_path + TEMPLATE_DIR
-    #             break
 
     if not TEMPLATE_DIR_PATH_FOUND:
         logging.error("Template dir was not found!")
         sys.exit(1)
+
+    # In development env. uncomment this
+    # TEMPLATE_DIR = 'templates/'
 
     print("Templates location: " + TEMPLATE_DIR)
     TEMPLATE_FILE = 'mkdocs.jinja'
@@ -727,8 +733,9 @@ def main():
             logging.debug(gen_text)
             sub_reg = r"(" + attribs.parent_element.group() + r"\s?)(.*?)(<!--end-->)"
 
-            if attribs.template == "gen_tags.jinja":
-                subst = "\\1" + "\\3\n" + gen_text
+            if attribs.remove:
+                # subst = "\\1" + "\\3\n" + gen_text
+                subst = gen_text
             else:
                 # Nahradenie casti za vygenerovane kody
                 if attribs.append:

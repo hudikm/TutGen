@@ -1,10 +1,13 @@
 from setuptools import setup
 import pathlib
+import glob
 
-# datadir = os.path.join('templates')
-# datafiles = [(d, [os.path.join(d,f) for f in files])
-#     for d, folders, files in os.walk(datadir)]
+data_files = []
+directories = glob.glob('templates/')
 
+for directory in directories:
+    files = glob.glob(directory+'*')
+    data_files.append(('/TutGen/' + directory, files))
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
@@ -27,5 +30,6 @@ setup(
     # data_files use relative paths(user or system wide):
     # sys.prefix -> /usr/local/
     # sys.USER_DEFINED -> linux  ~/.local/ or win %APPDATA%\Python
-    data_files=[('/TutGen/templates',['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])],
+    # data_files=[('/TutGen/templates',['templates/files_list.jinja', 'templates/gen_tags.jinja','templates/mkdocs.jinja','templates/mkdocs_obsah.jinja'])],
+    data_files=data_files
 )
