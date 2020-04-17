@@ -6,8 +6,6 @@ import pathlib
 #     for d, folders, files in os.walk(datadir)]
 
 
-
-
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
     name='TutGen',
