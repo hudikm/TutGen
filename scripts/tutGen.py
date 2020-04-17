@@ -529,7 +529,8 @@ def main():
     args = cliParser.parse_args()
 
     # TEMPLATE_DIR = str(pathlib.Path.home().joinpath('.local/TutGen/templates/'))
-    TEMPLATE_DIR = str(sys.prefix.joinpath('TutGen/templates/'))
+    TEMPLATE_DIR = str(sys.prefix+ '/TutGen/templates/')
+    print(TEMPLATE_DIR)
     TEMPLATE_FILE = 'mkdocs.jinja'
     MAIN_CONTEXT = 'MAIN_CONTEXT'
     # DIFF_CONTEXT = \
