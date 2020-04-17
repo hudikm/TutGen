@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import json
+import os
 import sys
 import logging
 import re
@@ -24,7 +25,7 @@ command:
 
 """
 
-logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
+
 
 def auto_str(cls):
     def __str__(self):
@@ -527,12 +528,54 @@ def main():
     cliParser.add_argument('-d', '--diff_file', metavar='diff_file', type=str, nargs='?', help='Git diff file/url')
     cliParser.add_argument('-e', '--encoding', metavar='encoding', type=str, nargs='?', help='Encodning', default='UTF-8')
     cliParser.add_argument('-t', '--template', metavar='template', type=str, nargs='?', help='Template file', default='mkdocs.jinja')
+    cliParser.add_argument('-v', '--verbose', help='Verbose mode',nargs='?', const=True, default=False)
     args = cliParser.parse_args()
-    
+    if args.verbose:
+        logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+    else:
+        logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
+
     # TEMPLATE_DIR = str(pathlib.Path.home().joinpath('.local/TutGen/templates/'))
     site.getuserbase();
-    TEMPLATE_DIR = str(site.USER_BASE + '/TutGen/templates/')
-    print(TEMPLATE_DIR)
+
+    # Find location of templates search from user space to system space
+
+    TEMPLATE_DIR = '/TutGen/templates/'
+    TEMPLATE_DIR_PATH_FOUND = False
+
+    # Find in user space first
+    search_in = []
+    search_in.append(site.getusersitepackages())
+    search_in.append(site.getsitepackages())
+
+    flatList = []
+    for elem in search_in:
+        if isinstance(elem,str):
+            flatList.append(elem)
+        else:
+            for item in elem:
+                flatList.append(item)
+
+
+    for loc_path in flatList:
+        logging.debug("Searching for temaplates in:"+ loc_path + TEMPLATE_DIR);
+        if os.path.isdir( loc_path + TEMPLATE_DIR):
+            TEMPLATE_DIR_PATH_FOUND = True
+            TEMPLATE_DIR = loc_path + TEMPLATE_DIR
+            break
+    # # If not found in user space, search in system wide
+    # if not TEMPLATE_DIR_PATH_FOUND:
+    #     for loc_path in site.getsitepackages():
+    #         if os.path.isdir(loc_path + TEMPLATE_DIR):
+    #             TEMPLATE_DIR_PATH_FOUND = True
+    #             TEMPLATE_DIR = loc_path + TEMPLATE_DIR
+    #             break
+
+    if not TEMPLATE_DIR_PATH_FOUND:
+        logging.error("Template dir was not found!")
+        sys.exit(1)
+
+    print("Templates location: " + TEMPLATE_DIR)
     TEMPLATE_FILE = 'mkdocs.jinja'
     MAIN_CONTEXT = 'MAIN_CONTEXT'
     # DIFF_CONTEXT = \
