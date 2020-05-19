@@ -1,2 +1,3 @@
 {#- Nadpis a tag -#}
+<br/>
 #### {{element.prefix if element.prefix != none }}{{ commit.tag if 'tag' in element.visibility.value  }}{{element.suffix if element.suffix != none}} {{ commit.msg if 'title' in element.visibility.value  }} {{ "[:link:]("+commit.remoteUrl[:-4]+"/commit/"+commit.hash+"/)" }}
