@@ -20,7 +20,7 @@ setup(
     # Needed for dependencies
     install_requires=['Jinja2', 'unidiff'],
     # *strongly* suggested for sharing
-    version='0.1',
+    version='0.2',
     # The license can be anything you like
     license='MIT',
     description='Generator step by step tutorials from patch file',
