@@ -58,6 +58,7 @@ class NewAttribs:
         var = self.steps = []
         var = self.file = None
         var = self.context = None
+        var = self.headerRegex = None
         var = self.lang = None
         var = self.prefix = None
         var = self.suffix = None
@@ -70,6 +71,19 @@ class NewAttribs:
         var = self.t_new = None
         # Pomocna premmena, ktora zabezpeci, ze v skupene spoloznych nastavení je mozne nastavit iba jedno
         var = self.oneonly_g1 = 0
+
+
+    def isHeaderValid(self, header):
+        if header is None or header == "":
+            return False
+        if self.headerRegex is None:
+            return True
+
+        matches = re.findall(self.headerRegex, header, re.MULTILINE)
+        if len(matches) == 0:
+            return False
+        else:
+            return True;
 
     # @property
     # def t_new(self):
@@ -447,6 +461,7 @@ class ContextResource:
         def __init__(self):
             # Set default values for all contexts
             self.context = None
+            self.headerRegex = None
             self.lang = None
             self.tabs = False
             self.t_old = 'Old'
@@ -580,8 +595,13 @@ def main():
         logging.error("Template dir was not found!")
         sys.exit(1)
 
+    #    ___  _____   _____ _    ___  ___ __  __ ___ _  _ _____
+    #   |   \| __\ \ / / __| |  / _ \| _ \  \/  | __| \| |_   _|
+    #   | |) | _| \ V /| _|| |_| (_) |  _/ |\/| | _|| .` | | |
+    #   |___/|___| \_/ |___|____\___/|_| |_|  |_|___|_|\_| |_|
+    #
     # In development env. uncomment this
-    # TEMPLATE_DIR = 'templates/'
+    TEMPLATE_DIR = 'templates/'
 
     print("Templates location: " + TEMPLATE_DIR)
     TEMPLATE_FILE = 'mkdocs.jinja'
