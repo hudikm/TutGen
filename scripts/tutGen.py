@@ -613,7 +613,7 @@ def main():
     #   |___/|___| \_/ |___|____\___/|_| |_|  |_|___|_|\_| |_|
     #
     # In development env. uncomment this
-    TEMPLATE_DIR = 'templates/'
+    # TEMPLATE_DIR = 'templates/'
 
     print("Templates location: " + TEMPLATE_DIR)
     TEMPLATE_FILE = 'mkdocs.jinja'
