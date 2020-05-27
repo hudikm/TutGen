@@ -13,6 +13,7 @@ import site
 from typing import Any, TypeVar
 from unidiff import PatchSet
 from enum import Enum
+from jinja2_ext_custom_autoescaping import CustomAutoescapeExtension, enable_custom_autoescaping
 
 """
 This example module shows various types of documentation available for use
@@ -84,6 +85,16 @@ class NewAttribs:
             return False
         else:
             return True;
+
+
+    @staticmethod
+    def repr(text):
+        # if index==29:
+        #     print(repr(list__[index]))
+        #     str_hex = ":".join("{:02x}".format(ord(c)) for c in list__[index])
+         print(string_escape(text))
+
+         return text
 
     # @property
     # def t_new(self):
@@ -509,7 +520,7 @@ class ContextResource:
 
         else:
             try:
-                file = open(url, "r", encoding=self.encoding)
+                file = open(url, "rb")
                 self.inputDiff = file.read()
                 file.close()
             except FileNotFoundError as e:
@@ -517,7 +528,8 @@ class ContextResource:
         self.commits = json.loads(self.inputDiff, encoding=self.encoding, object_hook=lambda a: Commit.from_dict(a))
         for index, commit in enumerate(self.commits):
             try:
-                self.commits[index].diff = PatchSet.from_string(commit.diff.encode(), encoding=encoding)
+                # self.commits[index].diff = PatchSet.from_string(commit.diff.encode(), encoding=encoding)
+                self.commits[index].diff = PatchSet.from_string(commit.diff)
 
             except Exception as e:
                 pass
@@ -601,7 +613,7 @@ def main():
     #   |___/|___| \_/ |___|____\___/|_| |_|  |_|___|_|\_| |_|
     #
     # In development env. uncomment this
-    # TEMPLATE_DIR = 'templates/'
+    TEMPLATE_DIR = 'templates/'
 
     print("Templates location: " + TEMPLATE_DIR)
     TEMPLATE_FILE = 'mkdocs.jinja'
@@ -620,8 +632,31 @@ def main():
     else:
         OUTPUT_FILE = args.outfile
 
+    # Custom autoescaping, This filter will escape string literals like \n \t \r \ ...
+    def my_filter(val):
+        if isinstance(val, str):
+            return jinja2.Markup(val.replace(r"\\", r"\\\\"))
+        return val
+
+    # Here you set the rules for when the built-in autoescaping will be enabled
+    built_in_select_autoescape = jinja2.select_autoescape(enabled_extensions=['html', 'htm', 'xml'],
+                                                   disabled_extensions=['md', 'tex'],
+                                                   default_for_string=False,
+                                                   default=False)
+
+    # Here you set the rules for when your custom autoescaping will be enabled
+    custom_select_autoescape = jinja2.select_autoescape(enabled_extensions=['md', 'tex'],
+                                                        default_for_string=True,
+                                                        default=True)
+
     # Set up jinja templates. Look for templates in the TEMPLATE_DIR
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR))
+    env = jinja2.Environment(extensions=[CustomAutoescapeExtension], loader=jinja2.FileSystemLoader(TEMPLATE_DIR, encoding="utf-8"), autoescape=built_in_select_autoescape)
+
+    opts = {'custom_select_autoescape': custom_select_autoescape,
+            'custom_autoescape_filter_name': 'my_filter',
+            'custom_autoescape_filter_func': my_filter}
+    enable_custom_autoescaping(env, **opts)
+
 
     # http = urllib.request
     # diff = http.urlopen('https://github.com/matiasb/python-unidiff/pull/3.diff')

@@ -18,9 +18,9 @@ setup(
     # Needed to actually package something
     packages=['TutGen'],
     # Needed for dependencies
-    install_requires=['Jinja2', 'unidiff'],
+    install_requires=['Jinja2', 'unidiff','jinja2-ext-custom-autoescaping'],
     # *strongly* suggested for sharing
-    version='0.2',
+    version='0.3',
     # The license can be anything you like
     license='MIT',
     description='Generator step by step tutorials from patch file',
