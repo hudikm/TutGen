@@ -14,7 +14,7 @@
 {%-   endif %}
 {%-   set ns.code_block = ns.code_block ~ line[1:] %}
 {%- endfor %}
-{{-'\n > '}}{{- section.section_header + '\n' if element.isHeaderValid(section.section_header)  }}
+{{-'\n> ' + section.section_header + '\n' if element.isHeaderValid(section.section_header) else '\n> \n'  }}
 ``` {{element.lang if element.lang != none }} {{("tab=\""+ element.t_new +"\"")  if element.tabs }} {{ ('hl_lines="' + ns.hl_lines[1:] +'"') if not element.nohighlight and ns.hl_lines[1:]|length > 0  }}
 {{ ns.code_block|indent(width=0, first=True, blank=True)}}
 ```
