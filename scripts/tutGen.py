@@ -282,7 +282,7 @@ class NewAttribs:
 
     def isInRange(self, step):
         if step.lower() == 'ignore':
-            # If commit is tagged as ignore that ignore it
+            # If commit is tagged as ignore than ignore it
             return False
         elif self.step == 'all':
             return True
